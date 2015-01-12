@@ -16,7 +16,7 @@ for (i in 1:dim(as.array(lying))) { likerthist(lying[i],datas); }
 
 ## demographics
 demographics <- c("q12.age","q12.gender","q12.genderdisclosed","q12.smphone","q12.smtabletother","q12.smweb")
-lyinghist(usage[1], datas)
+likerthist(usage[1], datas)
 barplot(table(datas[,'q12.age']),main='age')
 barplot(table(datas[,'q12.gender']),main='genderdisclosed')
 barplot(table(datas[,'q12.genderdisclosed']),main='gender')
@@ -39,3 +39,10 @@ print('facebook')
 print(summary(aov(q1.facebook ~ q12.age, data=datas)))
 print('tumblr')
 print(summary(aov(q1.tumblr ~ q12.age, data=datas)))
+
+nonblanks <- function(colname,survey) { 
+  si <- as.character(survey[,colname]);
+  si[nchar(si)>0]
+}
+  
+
