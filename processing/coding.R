@@ -1,5 +1,5 @@
 library("ggplot2")
-library("reshape")
+library("reshape2")
 
 # Read the codes from a filename, and convert them to a true/false table
 # as per codesToTable
@@ -27,8 +27,15 @@ codesToTable <- function(data,colname,idcol="personid",separator="\\s*[;,]\\s*")
   names(d) <- c(idcol)
 
   # Column for each tag with true/false in
-  for( t in tags ) { d[[t]] = grepl(t,data[,colname])}
+  for( t in tags ) { d[[t]] = unlist(lapply(as.character(data[,colname]),function(x) {hasTag(t,x,separator)}))}
+					
   d
+}
+
+hasTag <- function(tag,input,separator) {
+	tags = unlist(strsplit(as.character(unlist(input)),separator))
+  if( tag %in% tags ) T
+	else F
 }
 
 # Takes a table made by codesToTable and plots a bar chart
@@ -47,27 +54,39 @@ tableToBar <- function(data,remove=c()) {
 
 # Takes a list of tables from codesToTable, plots a chart with all the tags in
 multipleToBar <- function(data,remove=c()) {
+  print("Starting multiple bar")
 	d <- data.frame()
+  print("Melting and binding")
 	for( n in names(data) )
 	{
+    print("Input")
     print(head(data[[n]]))
+    print("Melting")
 		df <- melt(data[[n]],id.vars="personid")
+    print("Melted")
 		df$question = n
     print(head(df))
+    print("Binding")
 		d <- rbind(d,df)
 	}
+  
   # Remove the tags we don't want
+print("Removing tags")
   for( r in remove ) d <- d[d$variable != r,]
   
   # Aggregate
+print("Aggregating")
 	va = aggregate(d$value,by=list(Tag=d$variable,Question=d$question),FUN=sum)
   va$Question = factor(va$Question)
   va$Tag = factor(va$Tag)
   
 	# Add in zero values
-  cb = expand.grid(Tag=levels(va$Tag), Question=levels(va$Question))
-  cb$x = 0
-	va <- rbind(va, cb)
+  #cb = expand.grid(Tag=levels(va$Tag), Question=levels(va$Question))
+  #cb$x = 0
+	#va <- rbind(va, cb)
+  
+  print("Data to plot")
+  print(va)
   
 	g <- ggplot(va,aes(x=reorder(Tag,x),y=x),fill=Question) + 
 			geom_bar(aes(fill=Question),position="dodge",stat="identity") + coord_flip() +
@@ -98,8 +117,25 @@ q4graph <- function() {
 	ggsave("../output/q4frequency.pdf",d,width=5,height=3)
 }
 
+# Assumes that questionData has been run to create the q5a and q5b variables
+q5agraph <- function() {
+	d <- multipleToBar(list(Pseudonym=q5a),remove=c("-","no")) +
+      theme(legend.position="none")
+	ggsave("../output/q5afrequency.pdf",d,width=5,height=5)
+}
+
+# Assumes that questionData has been run to create the q5a and q5b variables
+q5bgraph <- function() {
+	d <- multipleToBar(list(Persona=q5b),remove=c("-","no")) +
+      theme(legend.position="none")
+	ggsave("../output/q5bfrequency.pdf",d,width=5,height=4)
+}
+
+
 makeGraphs <- function() {
   questionData()
 	q5graph()
+	q5agraph()
+	q5bgraph()
 	q4graph()
 }
