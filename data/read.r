@@ -45,4 +45,20 @@ nonblanks <- function(colname,survey) {
   si[nchar(si)>0]
 }
   
+q4 <- read.csv('q4-common.csv', header=TRUE)
+q4ans <- q4$Consolidated[nchar(as.character(q4$Consolidated)) > 0]
+print (length(q4ans))
+print(length(q4ans[q4ans == "no"]))
+print(length(q4ans[q4ans != "no"]))
+print(length(q4ans[q4ans == "yes"]))
+print(length(q4ans[q4ans == "-"]))
+
+
+q4s <- strsplit(as.character(q4ans), ";")
+q4ls <- sapply(q4s,length)
+print(mean(q4ls))
+
+
+
+
 
