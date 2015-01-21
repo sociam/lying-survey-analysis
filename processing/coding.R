@@ -53,4 +53,5 @@ multipleToBar <- function(data) {
 	va = aggregate(d$value,by=list(Tag=d$variable,Question=d$question),FUN=sum)
 	print(va)
 	ggplot(va,aes(x=Tag,y=x),fill=Question) + geom_bar(aes(fill=Question),position="dodge",stat="identity") + coord_flip()
+  
 }
