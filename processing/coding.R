@@ -17,7 +17,7 @@ codesFromFile <- function(filename="../data/Q4.csv",colname="Consolidated") {
 # 1   true  false true
 # 2   false true  false
 
-codesToTable <- function(data,colname,idcol="personid",separator="\\s*;\\s*") {
+codesToTable <- function(data,colname,idcol="personid",separator="\\s*[;,]\\s*") {
   #Pull out unique tags
   tags = unique(unlist( lapply(as.character(data[,colname]),function(x) strsplit(x,separator) ) ) )
   print(paste("Tags in",colname)); print(tags)
@@ -39,4 +39,19 @@ tableToBar <- function(data) {
 	mdf = md[md$value == T,]
 	#aes(factor...) means count for the bar chart
 	ggplot(mdf,aes(factor(variable))) + geom_bar() + coord_flip()
+}
+
+# Takes a list of tables from codesToTable, plots a chart with all the tags in
+multipleToBar <- function(data) {
+	d <- data.frame()
+	for( n in names(data) )
+	{
+		df <- melt(data[[n]],id.vars="personid")
+		df$question = n
+		d <- rbind(d,df)
+	}
+	va = aggregate(d$value,by=list(Tag=d$variable,Question=d$question),FUN=sum)
+	print(va)
+	ggplot(va,aes(x=Tag,y=x),fill=Question) + geom_bar(aes(fill=Question),position="dodge",stat="identity") + coord_flip()
+  
 }
