@@ -117,6 +117,7 @@ q4graph <- function() {
 	d <- multipleToBar(list(q4=q4),remove=c("-","no"))  +
       theme(legend.position="none")
 	ggsave("../output/q4frequency.pdf",d,width=5,height=3)
+  d
 }
 
 # Assumes that questionData has been run to create the q5a and q5b variables
@@ -124,6 +125,7 @@ q5agraph <- function() {
 	d <- multipleToBar(list(Pseudonym=q5a),remove=c("-","no")) +
       theme(legend.position="none")
 	ggsave("../output/q5afrequency.pdf",d,width=5,height=5)
+  d
 }
 
 # Assumes that questionData has been run to create the q5a and q5b variables
@@ -131,6 +133,7 @@ q5bgraph <- function() {
 	d <- multipleToBar(list(Persona=q5b),remove=c("-","no")) +
       theme(legend.position="none")
 	ggsave("../output/q5bfrequency.pdf",d,width=5,height=4)
+  d
 }
 
 
