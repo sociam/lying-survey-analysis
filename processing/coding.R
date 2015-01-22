@@ -19,7 +19,7 @@ codesFromFile <- function(filename="../data/Q4.csv",colname="Consolidated") {
 
 codesToTable <- function(data,colname,idcol="personid",separator="\\s*[;,]\\s*") {
   #Pull out unique tags
-  tags = unique(unlist( lapply(as.character(data[,colname]),function(x) strsplit(x,separator) ) ) )
+  tags = unique(trim( unlist( lapply(as.character(data[,colname]),function(x) strsplit(x,separator) ) ) ))
   print(paste("Tags in",colname)); print(tags)
   
   #New data.frame for results with ID column in
@@ -31,6 +31,8 @@ codesToTable <- function(data,colname,idcol="personid",separator="\\s*[;,]\\s*")
 					
   d
 }
+
+trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 hasTag <- function(tag,input,separator) {
 	tags = unlist(strsplit(as.character(unlist(input)),separator))
