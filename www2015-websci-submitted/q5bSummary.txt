@@ -1,0 +1,12 @@
+
+
+Counts: (from doing 'colSums(q5b+0)')
+
+       personid              no        creative       character             yes
+             NA             173              21              11               7
+        privacy      experiment      separation               -          soceng
+              2              10               7              19               5
+            spy         bespoke        identity           habit         conform
+              1               1               1               1               2
+discoverability      expression            plus             sex
+              1               3               1               1
