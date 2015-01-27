@@ -53,7 +53,6 @@ print(length(q4ans[q4ans != "no"]))
 print(length(q4ans[q4ans == "yes"]))
 print(length(q4ans[q4ans == "-"]))
 
-
 q4s <- strsplit(as.character(q4ans), ";")
 q4ls <- sapply(q4s,length)
 print(mean(q4ls))
